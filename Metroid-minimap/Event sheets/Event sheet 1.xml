@@ -1,0 +1,723 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<c2eventsheet>
+    <!--All the 'name' attributes are ignored by Construct 2 - they are there for readability only.-->
+    <name>Event sheet 1</name>
+    <events>
+        <comment>Global variables used for positioning the maptiles</comment>
+        <variable constant="0" name="MapShiftX" sid="54" static="0" type="number">18</variable>
+        <variable constant="0" name="MapShiftY" sid="55" static="0" type="number">12</variable>
+        <event-group description="" sid="56" title="Platform engine">
+            <sub-events>
+                <comment>Use the down arrow to allow the player to deliberately drop down through a jump-thru platform.</comment>
+                <event-block sid="57">
+                    <conditions>
+                        <condition id="0" name="On key pressed" sid="58" type="Keyboard">
+                            <param id="0" name="Key">40 (Down arrow)</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action behavior="Platform" id="12" name="Fall through" sid="59" type="Player" />
+                    </actions>
+                </event-block>
+                <comment>Allow WASD as alternate controls to arrow keys.</comment>
+                <event-block sid="60">
+                    <conditions>
+                        <condition id="2" name="Key is down" sid="61" type="Keyboard">
+                            <param id="0" name="Key">87 (W)</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action behavior="Platform" id="7" name="Simulate control" sid="62" type="Player">
+                            <param id="0" name="Control">2</param>
+                        </action>
+                    </actions>
+                </event-block>
+                <event-block sid="63">
+                    <conditions>
+                        <condition id="2" name="Key is down" sid="64" type="Keyboard">
+                            <param id="0" name="Key">65 (A)</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action behavior="Platform" id="7" name="Simulate control" sid="65" type="Player">
+                            <param id="0" name="Control">0</param>
+                        </action>
+                    </actions>
+                </event-block>
+                <event-block sid="66">
+                    <conditions>
+                        <condition id="2" name="Key is down" sid="67" type="Keyboard">
+                            <param id="0" name="Key">83 (S)</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action behavior="Platform" id="12" name="Fall through" sid="68" type="Player" />
+                    </actions>
+                </event-block>
+                <event-block sid="69">
+                    <conditions>
+                        <condition id="2" name="Key is down" sid="70" type="Keyboard">
+                            <param id="0" name="Key">68 (D)</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action behavior="Platform" id="7" name="Simulate control" sid="71" type="Player">
+                            <param id="0" name="Control">1</param>
+                        </action>
+                    </actions>
+                </event-block>
+                <comment>Mirror the player&apos;s image so they appear facing the right way when moving left or right.</comment>
+                <event-block any="1" sid="72">
+                    <conditions>
+                        <condition id="0" name="On key pressed" sid="73" type="Keyboard">
+                            <param id="0" name="Key">37 (Left arrow)</param>
+                        </condition>
+                        <condition id="0" name="On key pressed" sid="74" type="Keyboard">
+                            <param id="0" name="Key">65 (A)</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="7" name="Set mirrored" sid="75" type="Player">
+                            <param id="0" name="State">0</param>
+                        </action>
+                    </actions>
+                </event-block>
+                <event-block any="1" sid="76">
+                    <conditions>
+                        <condition id="0" name="On key pressed" sid="77" type="Keyboard">
+                            <param id="0" name="Key">39 (Right arrow)</param>
+                        </condition>
+                        <condition id="0" name="On key pressed" sid="78" type="Keyboard">
+                            <param id="0" name="Key">68 (D)</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="7" name="Set mirrored" sid="79" type="Player">
+                            <param id="0" name="State">1</param>
+                        </action>
+                    </actions>
+                </event-block>
+                <comment>If the player falls off the bottom of the layout, restart the level.</comment>
+                <event-block sid="80">
+                    <conditions>
+                        <condition id="-2" name="Compare Y" sid="81" type="Player">
+                            <param id="0" name="Comparison">4</param>
+                            <param id="1" name="Y co-ordinate">LayoutHeight</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="-26" name="Restart layout" sid="82" type="System" />
+                    </actions>
+                </event-block>
+            </sub-events>
+        </event-group>
+        <event-group description="" sid="83" title="Metroid Minimap Mechanics">
+            <sub-events>
+                <event-group description="" sid="944753977210092" title="Initializating">
+                    <sub-events>
+                        <comment>At the beginning of the layout, set up the minimap tiles.</comment>
+                        <event-block sid="84">
+                            <conditions>
+                                <condition id="-2" name="On start of layout" sid="85" type="System" />
+                            </conditions>
+                            <actions>
+                                <action id="-9" name="Destroy" sid="86" type="MiniMapIcons" />
+                                <action id="-9" name="Destroy" sid="87" type="MapContentsIcons" />
+                            </actions>
+                            <sub-events>
+                                <comment>Basically downscaling the positions of the tiles for the map</comment>
+                                <event-block sid="88">
+                                    <conditions>
+                                        <condition id="-11" name="For Each" sid="89" type="System">
+                                            <param id="0" name="Object">RoomTiles</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="5" name="Set frame" sid="90" type="RoomTiles">
+                                            <param id="0" name="Frame number">RoomTiles.RoomType</param>
+                                        </action>
+                                        <action id="-10" name="Set value" sid="91" type="RoomTiles">
+                                            <param id="0" name="Instance variable">ID</param>
+                                            <param id="1" name="Value">loopindex</param>
+                                        </action>
+                                        <action id="-10" name="Set value" sid="92" type="RoomTiles">
+                                            <param id="0" name="Instance variable">GridX</param>
+                                            <param id="1" name="Value">RoomTiles.X/320</param>
+                                        </action>
+                                        <action id="-10" name="Set value" sid="93" type="RoomTiles">
+                                            <param id="0" name="Instance variable">GridY</param>
+                                            <param id="1" name="Value">RoomTiles.Y/240</param>
+                                        </action>
+                                    </actions>
+                                    <sub-events>
+                                        <comment>Basically taking all the data of the RoomTile to it&apos;s Minimap version object.</comment>
+                                        <event-block sid="94">
+                                            <conditions>
+                                                <condition id="-7" name="Compare instance variable" sid="95" type="RoomTiles">
+                                                    <param id="0" name="Instance variable">RoomType</param>
+                                                    <param id="1" name="Comparison">1</param>
+                                                    <param id="2" name="Value">0</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="-3" name="Create object" sid="96" type="System">
+                                                    <param id="0" name="Object to create">MiniMapIcons</param>
+                                                    <param id="1" name="Layer">&quot;MiniMap&quot;</param>
+                                                    <param id="2" name="X">RoomTiles.X/40</param>
+                                                    <param id="3" name="Y">RoomTiles.Y/30</param>
+                                                </action>
+                                                <action id="-10" name="Set value" sid="97" type="MiniMapIcons">
+                                                    <param id="0" name="Instance variable">ID</param>
+                                                    <param id="1" name="Value">RoomTiles.ID</param>
+                                                </action>
+                                                <action id="-10" name="Set value" sid="98" type="MiniMapIcons">
+                                                    <param id="0" name="Instance variable">GridX</param>
+                                                    <param id="1" name="Value">RoomTiles.GridX</param>
+                                                </action>
+                                                <action id="-10" name="Set value" sid="99" type="MiniMapIcons">
+                                                    <param id="0" name="Instance variable">GridY</param>
+                                                    <param id="1" name="Value">RoomTiles.GridY</param>
+                                                </action>
+                                                <action id="-10" name="Set value" sid="100" type="MiniMapIcons">
+                                                    <param id="0" name="Instance variable">Revealed</param>
+                                                    <param id="1" name="Value">RoomTiles.Revealed</param>
+                                                </action>
+                                                <action id="-10" name="Set value" sid="101" type="MiniMapIcons">
+                                                    <param id="0" name="Instance variable">Explored</param>
+                                                    <param id="1" name="Value">RoomTiles.Explored</param>
+                                                </action>
+                                                <action id="-10" name="Set value" sid="102" type="MiniMapIcons">
+                                                    <param id="0" name="Instance variable">RoomType</param>
+                                                    <param id="1" name="Value">RoomTiles.RoomType</param>
+                                                </action>
+                                                <action id="-10" name="Set value" sid="103" type="MiniMapIcons">
+                                                    <param id="0" name="Instance variable">RoomColour</param>
+                                                    <param id="1" name="Value">RoomTiles.RoomColour</param>
+                                                </action>
+                                                <action id="-10" name="Set value" sid="104" type="MiniMapIcons">
+                                                    <param id="0" name="Instance variable">RoomGroup</param>
+                                                    <param id="1" name="Value">RoomTiles.RoomGroup</param>
+                                                </action>
+                                                <action id="-10" name="Set value" sid="105" type="MiniMapIcons">
+                                                    <param id="0" name="Instance variable">RoomContents</param>
+                                                    <param id="1" name="Value">RoomTiles.RoomContents</param>
+                                                </action>
+                                                <action id="5" name="Set frame" sid="106" type="MiniMapIcons">
+                                                    <param id="0" name="Frame number">MiniMapIcons.RoomType</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <comment>If the Room contains something, it will be drawn on the minimap.</comment>
+                                        <event-block sid="107">
+                                            <conditions>
+                                                <condition id="-7" name="Compare instance variable" sid="108" type="RoomTiles">
+                                                    <param id="0" name="Instance variable">RoomContents</param>
+                                                    <param id="1" name="Comparison">4</param>
+                                                    <param id="2" name="Value">0</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="-3" name="Create object" sid="109" type="System">
+                                                    <param id="0" name="Object to create">MapContentsIcons</param>
+                                                    <param id="1" name="Layer">&quot;MiniMap&quot;</param>
+                                                    <param id="2" name="X">RoomTiles.X/40</param>
+                                                    <param id="3" name="Y">RoomTiles.Y/30</param>
+                                                </action>
+                                                <action id="-10" name="Set value" sid="110" type="MapContentsIcons">
+                                                    <param id="0" name="Instance variable">ID</param>
+                                                    <param id="1" name="Value">RoomTiles.ID</param>
+                                                </action>
+                                                <action id="-10" name="Set value" sid="111" type="MapContentsIcons">
+                                                    <param id="0" name="Instance variable">GridX</param>
+                                                    <param id="1" name="Value">RoomTiles.GridX</param>
+                                                </action>
+                                                <action id="-10" name="Set value" sid="112" type="MapContentsIcons">
+                                                    <param id="0" name="Instance variable">GridY</param>
+                                                    <param id="1" name="Value">RoomTiles.GridY</param>
+                                                </action>
+                                                <action id="-10" name="Set value" sid="113" type="MapContentsIcons">
+                                                    <param id="0" name="Instance variable">Revealed</param>
+                                                    <param id="1" name="Value">RoomTiles.Revealed</param>
+                                                </action>
+                                                <action id="-10" name="Set value" sid="114" type="MapContentsIcons">
+                                                    <param id="0" name="Instance variable">Explored</param>
+                                                    <param id="1" name="Value">RoomTiles.Explored</param>
+                                                </action>
+                                                <action id="-10" name="Set value" sid="115" type="MapContentsIcons">
+                                                    <param id="0" name="Instance variable">RoomContents</param>
+                                                    <param id="1" name="Value">RoomTiles.RoomContents</param>
+                                                </action>
+                                                <action id="5" name="Set frame" sid="116" type="MapContentsIcons">
+                                                    <param id="0" name="Frame number">MapContentsIcons.RoomContents</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                    </sub-events>
+                                </event-block>
+                                <comment>In order to create the sprite masking for the map</comment>
+                                <event-block sid="805533395242798">
+                                    <conditions />
+                                    <actions>
+                                        <action id="-24" name="Move to top" sid="863315352811830" type="Mask" />
+                                    </actions>
+                                </event-block>
+                            </sub-events>
+                        </event-block>
+                    </sub-events>
+                </event-group>
+                <event-group description="" sid="763586391929237" title="Positions">
+                    <sub-events>
+                        <comment>Positioning for the minimap and the player indicator.</comment>
+                        <event-block sid="117">
+                            <conditions>
+                                <condition id="-1" name="Every tick" sid="118" type="System" />
+                            </conditions>
+                            <actions>
+                                <action id="-24" name="Move to top" sid="119" type="PositionIndicator" />
+                                <action id="-3" name="Set position" sid="120" type="PositionIndicator">
+                                    <param id="0" name="X">(floor(Player.X/320)+(MapShiftX))*8</param>
+                                    <param id="1" name="Y">(floor(Player.Y/240)+(MapShiftY))*8</param>
+                                </action>
+                                <action id="-14" name="Set object time scale" sid="121" type="System">
+                                    <param id="0" name="Object">PositionIndicator</param>
+                                    <param id="1" name="Time scale">1.0</param>
+                                </action>
+                                <action id="-14" name="Set object time scale" sid="122" type="System">
+                                    <param id="0" name="Object">MapContentsIcons</param>
+                                    <param id="1" name="Time scale">1.0</param>
+                                </action>
+                                <action id="-3" name="Set position" sid="123" type="MiniMapIcons">
+                                    <param id="0" name="X">(MiniMapIcons.GridX+MapShiftX)*8</param>
+                                    <param id="1" name="Y">(MiniMapIcons.GridY+MapShiftY)*8</param>
+                                </action>
+                                <action id="-3" name="Set position" sid="124" type="MapContentsIcons">
+                                    <param id="0" name="X">(MapContentsIcons.GridX+MapShiftX)*8</param>
+                                    <param id="1" name="Y">(MapContentsIcons.GridY+MapShiftY)*8</param>
+                                </action>
+                            </actions>
+                        </event-block>
+                        <event-group description="" sid="276074498785655" title="Position-Checking">
+                            <sub-events>
+                                <comment>If the player is positioned in the right place...</comment>
+                                <event-block sid="128">
+                                    <conditions>
+                                        <condition id="-7" name="Compare instance variable" sid="129" type="MiniMapIcons">
+                                            <param id="0" name="Instance variable">GridX</param>
+                                            <param id="1" name="Comparison">0</param>
+                                            <param id="2" name="Value">floor(Player.X/320)</param>
+                                        </condition>
+                                        <condition id="-7" name="Compare instance variable" sid="130" type="MiniMapIcons">
+                                            <param id="0" name="Instance variable">GridY</param>
+                                            <param id="1" name="Comparison">0</param>
+                                            <param id="2" name="Value">floor(Player.Y/240)</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="0" name="Set text" sid="842307717208688" type="Text">
+                                            <param id="0" name="Text">(MiniMapIcons.GridX+MapShiftX)*8</param>
+                                        </action>
+                                        <action id="0" name="Set text" sid="194916356179419" type="Text2">
+                                            <param id="0" name="Text">(MiniMapIcons.GridY+MapShiftY)*8</param>
+                                        </action>
+                                    </actions>
+                                    <sub-events>
+                                        <comment>...reveal more of the map, if that grid section has not been explored yet.</comment>
+                                        <event-block sid="132">
+                                            <conditions>
+                                                <condition id="-7" name="Compare instance variable" sid="133" type="MiniMapIcons">
+                                                    <param id="0" name="Instance variable">Explored</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Value">0</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="-10" name="Set value" sid="134" type="MiniMapIcons">
+                                                    <param id="0" name="Instance variable">Explored</param>
+                                                    <param id="1" name="Value">1</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="597263805850365">
+                                            <conditions>
+                                                <condition id="-7" name="Compare instance variable" sid="832408180217579" type="MiniMapIcons">
+                                                    <param id="0" name="Instance variable">PlayerOccupied</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Value">0</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="-10" name="Set value" sid="131" type="MiniMapIcons">
+                                                    <param id="0" name="Instance variable">PlayerOccupied</param>
+                                                    <param id="1" name="Value">1</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <comment>Conditions to center the Map using static positions (there&apos;s also static positions for the ubication of the maptiles so you might want to change this for a custom position of the Minimap. (just for fancy stuff.)</comment>
+                                        <event-block sid="268369157130279">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="225415985173554" type="System">
+                                                    <param id="0" name="First value">floor((MiniMapIcons.GridX+MapShiftX)*8)</param>
+                                                    <param id="1" name="Comparison">4</param>
+                                                    <param id="2" name="Second value">144</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="-11" name="Subtract from" sid="353586728247759" type="System">
+                                                    <param id="0" name="Variable">MapShiftX</param>
+                                                    <param id="1" name="Value">0.1</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="526057443030688">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="933190183121035" type="System">
+                                                    <param id="0" name="First value">floor((MiniMapIcons.GridX+MapShiftX)*8)</param>
+                                                    <param id="1" name="Comparison">2</param>
+                                                    <param id="2" name="Second value">144</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="-10" name="Add to" sid="106970423442064" type="System">
+                                                    <param id="0" name="Variable">MapShiftX</param>
+                                                    <param id="1" name="Value">0.1</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="313976614371696">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="456607891553222" type="System">
+                                                    <param id="0" name="First value">floor((MiniMapIcons.GridY+MapShiftY)*8)</param>
+                                                    <param id="1" name="Comparison">4</param>
+                                                    <param id="2" name="Second value">120</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="-11" name="Subtract from" sid="301438701747952" type="System">
+                                                    <param id="0" name="Variable">MapShiftY</param>
+                                                    <param id="1" name="Value">0.1</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                        <event-block sid="305313961750984">
+                                            <conditions>
+                                                <condition id="-8" name="Compare two values" sid="213527036778154" type="System">
+                                                    <param id="0" name="First value">floor((MiniMapIcons.GridY+MapShiftY)*8)</param>
+                                                    <param id="1" name="Comparison">2</param>
+                                                    <param id="2" name="Second value">120</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="-10" name="Add to" sid="258539985977294" type="System">
+                                                    <param id="0" name="Variable">MapShiftY</param>
+                                                    <param id="1" name="Value">0.1</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                    </sub-events>
+                                </event-block>
+                                <event-block sid="135">
+                                    <conditions>
+                                        <condition id="-7" name="Compare instance variable" sid="136" type="MiniMapIcons">
+                                            <param id="0" name="Instance variable">GridX</param>
+                                            <param id="1" name="Comparison">1</param>
+                                            <param id="2" name="Value">floor(Player.X/320)</param>
+                                        </condition>
+                                        <condition id="-7" name="Compare instance variable" sid="137" type="MiniMapIcons">
+                                            <param id="0" name="Instance variable">GridY</param>
+                                            <param id="1" name="Comparison">1</param>
+                                            <param id="2" name="Value">floor(Player.Y/240)</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="-10" name="Set value" sid="138" type="MiniMapIcons">
+                                            <param id="0" name="Instance variable">PlayerOccupied</param>
+                                            <param id="1" name="Value">0</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                                <event-block sid="139">
+                                    <conditions>
+                                        <condition id="-7" name="Compare instance variable" sid="140" type="MapContentsIcons">
+                                            <param id="0" name="Instance variable">GridX</param>
+                                            <param id="1" name="Comparison">0</param>
+                                            <param id="2" name="Value">floor(Player.X/320)</param>
+                                        </condition>
+                                        <condition id="-7" name="Compare instance variable" sid="141" type="MapContentsIcons">
+                                            <param id="0" name="Instance variable">GridY</param>
+                                            <param id="1" name="Comparison">0</param>
+                                            <param id="2" name="Value">floor(Player.Y/240)</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="-10" name="Set value" sid="142" type="MapContentsIcons">
+                                            <param id="0" name="Instance variable">PlayerOccupied</param>
+                                            <param id="1" name="Value">1</param>
+                                        </action>
+                                    </actions>
+                                    <sub-events>
+                                        <event-block sid="143">
+                                            <conditions>
+                                                <condition id="-7" name="Compare instance variable" sid="144" type="MapContentsIcons">
+                                                    <param id="0" name="Instance variable">Explored</param>
+                                                    <param id="1" name="Comparison">0</param>
+                                                    <param id="2" name="Value">0</param>
+                                                </condition>
+                                            </conditions>
+                                            <actions>
+                                                <action id="-10" name="Set value" sid="145" type="MapContentsIcons">
+                                                    <param id="0" name="Instance variable">Explored</param>
+                                                    <param id="1" name="Value">1</param>
+                                                </action>
+                                            </actions>
+                                        </event-block>
+                                    </sub-events>
+                                </event-block>
+                            </sub-events>
+                        </event-group>
+                    </sub-events>
+                </event-group>
+                <event-group description="" sid="816930335007731" title="Minimaps explored">
+                    <sub-events>
+                        <comment>Setting up animations to differentiate grid spaces.</comment>
+                        <event-block sid="146">
+                            <conditions>
+                                <condition id="-7" name="Compare instance variable" sid="147" type="MiniMapIcons">
+                                    <param id="0" name="Instance variable">Explored</param>
+                                    <param id="1" name="Comparison">0</param>
+                                    <param id="2" name="Value">0</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="4" name="Set animation" sid="148" type="MiniMapIcons">
+                                    <param id="0" name="Animation">&quot;Unexplored&quot;</param>
+                                    <param id="1" name="From">0</param>
+                                </action>
+                            </actions>
+                        </event-block>
+                        <event-block sid="149">
+                            <conditions>
+                                <condition id="-7" name="Compare instance variable" sid="150" type="MiniMapIcons">
+                                    <param id="0" name="Instance variable">Explored</param>
+                                    <param id="1" name="Comparison">0</param>
+                                    <param id="2" name="Value">1</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="4" name="Set animation" sid="151" type="MiniMapIcons">
+                                    <param id="0" name="Animation">&quot;Explored&quot;</param>
+                                    <param id="1" name="From">0</param>
+                                </action>
+                            </actions>
+                        </event-block>
+                    </sub-events>
+                </event-group>
+                <event-group description="" sid="539106774615072" title="Visibility offset of the map">
+                    <sub-events>
+                        <comment>Affecting visibility (whether it be via discovery or a player being given information on the map). Tiles not on the grid disappear.</comment>
+                        <event-block any="1" sid="154">
+                            <conditions>
+                                <condition id="-7" name="Compare instance variable" sid="155" type="MiniMapIcons">
+                                    <param id="0" name="Instance variable">Revealed</param>
+                                    <param id="1" name="Comparison">0</param>
+                                    <param id="2" name="Value">1</param>
+                                </condition>
+                                <condition id="-7" name="Compare instance variable" sid="156" type="MiniMapIcons">
+                                    <param id="0" name="Instance variable">Explored</param>
+                                    <param id="1" name="Comparison">0</param>
+                                    <param id="2" name="Value">1</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="-15" name="Set visible" sid="157" type="MiniMapIcons">
+                                    <param id="0" name="Visibility">1</param>
+                                </action>
+                            </actions>
+                        </event-block>
+                        <event-block sid="158">
+                            <conditions>
+                                <condition id="-7" name="Compare instance variable" sid="159" type="MiniMapIcons">
+                                    <param id="0" name="Instance variable">Revealed</param>
+                                    <param id="1" name="Comparison">0</param>
+                                    <param id="2" name="Value">0</param>
+                                </condition>
+                                <condition id="-7" name="Compare instance variable" sid="160" type="MiniMapIcons">
+                                    <param id="0" name="Instance variable">Explored</param>
+                                    <param id="1" name="Comparison">0</param>
+                                    <param id="2" name="Value">0</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="-15" name="Set visible" sid="161" type="MiniMapIcons">
+                                    <param id="0" name="Visibility">0</param>
+                                </action>
+                            </actions>
+                        </event-block>
+                        <event-block sid="165">
+                            <conditions>
+                                <condition id="-7" name="Compare instance variable" sid="166" type="MapContentsIcons">
+                                    <param id="0" name="Instance variable">ID</param>
+                                    <param id="1" name="Comparison">0</param>
+                                    <param id="2" name="Value">MiniMapIcons.ID</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="-10" name="Set value" sid="167" type="MapContentsIcons">
+                                    <param id="0" name="Instance variable">Revealed</param>
+                                    <param id="1" name="Value">MiniMapIcons.Revealed</param>
+                                </action>
+                                <action id="-10" name="Set value" sid="168" type="MapContentsIcons">
+                                    <param id="0" name="Instance variable">Explored</param>
+                                    <param id="1" name="Value">MiniMapIcons.Explored</param>
+                                </action>
+                            </actions>
+                            <sub-events>
+                                <event-block disabled="1" sid="169">
+                                    <conditions>
+                                        <condition id="-7" name="Compare instance variable" sid="170" type="MiniMapIcons">
+                                            <param id="0" name="Instance variable">Revealed</param>
+                                            <param id="1" name="Comparison">0</param>
+                                            <param id="2" name="Value">1</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="-10" name="Set value" sid="171" type="MapContentsIcons">
+                                            <param id="0" name="Instance variable">Revealed</param>
+                                            <param id="1" name="Value">1</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                                <event-block disabled="1" sid="172">
+                                    <conditions>
+                                        <condition id="-7" name="Compare instance variable" sid="173" type="MiniMapIcons">
+                                            <param id="0" name="Instance variable">Explored</param>
+                                            <param id="1" name="Comparison">0</param>
+                                            <param id="2" name="Value">1</param>
+                                        </condition>
+                                    </conditions>
+                                    <actions>
+                                        <action id="-10" name="Set value" sid="174" type="MapContentsIcons">
+                                            <param id="0" name="Instance variable">Explored</param>
+                                            <param id="1" name="Value">1</param>
+                                        </action>
+                                    </actions>
+                                </event-block>
+                            </sub-events>
+                        </event-block>
+                        <event-block any="1" sid="177">
+                            <conditions>
+                                <condition id="-7" name="Compare instance variable" sid="178" type="MapContentsIcons">
+                                    <param id="0" name="Instance variable">Revealed</param>
+                                    <param id="1" name="Comparison">0</param>
+                                    <param id="2" name="Value">1</param>
+                                </condition>
+                                <condition id="-7" name="Compare instance variable" sid="179" type="MapContentsIcons">
+                                    <param id="0" name="Instance variable">Explored</param>
+                                    <param id="1" name="Comparison">0</param>
+                                    <param id="2" name="Value">1</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="-15" name="Set visible" sid="180" type="MapContentsIcons">
+                                    <param id="0" name="Visibility">1</param>
+                                </action>
+                            </actions>
+                        </event-block>
+                        <event-block sid="181">
+                            <conditions>
+                                <condition id="-7" name="Compare instance variable" sid="182" type="MapContentsIcons">
+                                    <param id="0" name="Instance variable">Revealed</param>
+                                    <param id="1" name="Comparison">0</param>
+                                    <param id="2" name="Value">0</param>
+                                </condition>
+                                <condition id="-7" name="Compare instance variable" sid="183" type="MapContentsIcons">
+                                    <param id="0" name="Instance variable">Explored</param>
+                                    <param id="1" name="Comparison">0</param>
+                                    <param id="2" name="Value">0</param>
+                                </condition>
+                            </conditions>
+                            <actions>
+                                <action id="-15" name="Set visible" sid="184" type="MapContentsIcons">
+                                    <param id="0" name="Visibility">0</param>
+                                </action>
+                            </actions>
+                        </event-block>
+                    </sub-events>
+                </event-group>
+                <comment>Changing room colour via tinting (can also change animations as a non-effect alternative)</comment>
+                <event-block sid="188">
+                    <conditions>
+                        <condition id="-7" name="Compare instance variable" sid="189" type="MiniMapIcons">
+                            <param id="0" name="Instance variable">RoomColour</param>
+                            <param id="1" name="Comparison">0</param>
+                            <param id="2" name="Value">0</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="-27" name="Set effect enabled" sid="190" type="MiniMapIcons">
+                            <param id="0" name="Mode">0</param>
+                            <param id="1" name="Effect">&quot;Tint&quot;</param>
+                        </action>
+                    </actions>
+                </event-block>
+                <event-block sid="191">
+                    <conditions>
+                        <condition id="-7" name="Compare instance variable" sid="192" type="MiniMapIcons">
+                            <param id="0" name="Instance variable">RoomColour</param>
+                            <param id="1" name="Comparison">0</param>
+                            <param id="2" name="Value">1</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="-27" name="Set effect enabled" sid="193" type="MiniMapIcons">
+                            <param id="0" name="Mode">1</param>
+                            <param id="1" name="Effect">&quot;Tint&quot;</param>
+                        </action>
+                        <action id="-28" name="Set effect parameter" sid="194" type="MiniMapIcons">
+                            <param id="0" name="Effect">&quot;Tint&quot;</param>
+                            <param id="1" name="Parameter index">0</param>
+                            <param id="2" name="Value">0</param>
+                        </action>
+                        <action id="-28" name="Set effect parameter" sid="195" type="MiniMapIcons">
+                            <param id="0" name="Effect">&quot;Tint&quot;</param>
+                            <param id="1" name="Parameter index">1</param>
+                            <param id="2" name="Value">80</param>
+                        </action>
+                        <action id="-28" name="Set effect parameter" sid="196" type="MiniMapIcons">
+                            <param id="0" name="Effect">&quot;Tint&quot;</param>
+                            <param id="1" name="Parameter index">2</param>
+                            <param id="2" name="Value">50</param>
+                        </action>
+                    </actions>
+                </event-block>
+            </sub-events>
+        </event-group>
+        <event-group description="" sid="225" title="Saving and Loading">
+            <sub-events>
+                <event-block sid="226">
+                    <conditions>
+                        <condition id="0" name="On key pressed" sid="227" type="Keyboard">
+                            <param id="0" name="Key">84 (T)</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="-36" name="Save" sid="246" type="System">
+                            <param id="0" name="Slot">&quot;Save1&quot;</param>
+                        </action>
+                    </actions>
+                </event-block>
+                <event-block sid="235">
+                    <conditions>
+                        <condition id="0" name="On key pressed" sid="236" type="Keyboard">
+                            <param id="0" name="Key">89 (Y)</param>
+                        </condition>
+                    </conditions>
+                    <actions>
+                        <action id="-37" name="Load" sid="247" type="System">
+                            <param id="0" name="Slot">&quot;Save1&quot;</param>
+                        </action>
+                    </actions>
+                </event-block>
+            </sub-events>
+        </event-group>
+    </events>
+</c2eventsheet>
