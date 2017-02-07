@@ -151,6 +151,7 @@
                                     </actions>
                                     <sub-events>
                                         <comment>Basically taking all the data of the RoomTile to it&apos;s Minimap version object.</comment>
+                                        <comment>Each screen / smallest room is 320x240. The map squares should actually be rectangles to account for the wide resolution, but Metroid has always used 8x8 squares. To fix that you set the map&apos;s x offset to scrollx / 40, and the y offset to scrollx / 30.&#x0D;&#x0A;So that makes 320/40 = 8 and 240/30 = 8.</comment>
                                         <event-block sid="94">
                                             <conditions>
                                                 <condition id="-7" name="Compare instance variable" sid="95" type="RoomTiles">
